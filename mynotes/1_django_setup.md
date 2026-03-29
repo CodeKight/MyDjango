@@ -8,7 +8,7 @@ or,
 virtualenv environment_name 
 
 # step 3: activate virtual environment
-env\Scripts\activate (windows/cmd)
+env\Scripts\activate (windows/cmd/powershell)
 source  env/Scripts/activate (mac/gitbash)
 source env/bin/activate (linux)
 

@@ -1,0 +1,6 @@
+Table : Todolist
+- title        - char
+- description  - text 
+- time         - date/time 
+- priority     - int/char
+- status (completed/incompleted)      - boolean 
