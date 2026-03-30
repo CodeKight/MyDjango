@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+</head>
+
+<div class="container">
+
+    <body>
+     <h1> {{first_line}} </h1>
+     <p> {{second_line}} </p>
+
+        <!-- creating dynamic table using bootstrap -->
+
+        <table class="table   table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Salary</th>
+                    <th scope="col">Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for i in people%}    <!-- people will contail the list of dictionary, i will contain the individual dictionary --> 
+                
+                 <!-- i = {"name": "Aarav", "age": 25, "salary": 50000, "address": "Kathmandu"}, -->
+               
+                 <tr>
+                    <th scope="row"> {{forloop.counter}} </th>  <!-- 'forloop.counter' is used to set id in ascending order  -->
+                    <td> {{i.name}} </td>
+
+                     <td> 
+                    {% if i.age < 18%} Underage 
+                    
+                    {%elif i.age >= 18 and i.age < 50 %} Adult
+                    
+                    {%else%} Old 
+
+                    
+                    {%endif%}
+                    ({{i.age}})
+                    </td>
+
+
+                    <td> {{i.salary}} </td>
+                    <td> {{i.address}} </td>
+                </tr>
+                {%endfor%}
+
+            </tbody>
+        </table>
+        
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

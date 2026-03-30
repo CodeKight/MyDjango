@@ -55,7 +55,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/'templates'],     # if you remove 'BASE_DIR' from here, then also there won't be any erro 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
