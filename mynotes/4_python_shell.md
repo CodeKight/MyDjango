@@ -43,6 +43,69 @@ Todo.objects.create(title="first", description = "this is first", status = False
 
 ## step 5: read (R) data 
 
+# all() → “Give me EVERYTHING”
+        - Returns ALL records from the table.
+
+        ✔ Example use:
+            1. Show all tasks in UI
+            2. Admin dashboard listing
+            3. Debugging / checking DB data
+# filter() → “Give me MATCHING rows”
+        * Use filter() when:
+        - Field is not unique
+        - Multiple results are possible
+        - You want conditional data
+
+        ✔ Example use:
+            1. Get all completed tasks
+            2. Get all tasks of a user
+            3. Search functionality
+# get() → “Give me EXACT ONE row or crash”
+        * Use get() when:
+        - Field is PRIMARY KEY (id)
+        - Field has unique=True
+        - You are 100% sure only one record exists
+
+        - get() is NOT for searching
+        - get() is for targeting ONE exact row
+        - get() = "I know exactly which record I want"
+
+        ✔ Use cases of get():
+        🔹 1. Get by ID
+                Fetch a specific record using primary key
+                👉 Used when user selects a particular item
+
+        🔹 2. Detail Page / API
+                Return data of one item (e.g., /todos/1)
+                👉 Used in single-item views or APIs
+                
+        🔹 3. Update Record
+                Get one object, modify it, then save
+                👉 Used for editing specific data
+
+        🔹 4. Delete Record
+                Get one object, then delete it
+                👉 Used when deleting a specific item
+
+        🔹 5. Get using Unique Field
+                Fetch using fields with unique=True (like email)
+                👉 Used in login or user-specific queries
+
+# all() and filter(): returns query set
+- They return a QuerySet (collection of objects)
+
+- 👉 So Django doesn’t know:
+- Which object's title??
+- That's why we cannot do Todo.objects.filter(status=True).title 
+
+# get(): returns model objects
+- It returns a single model object (instance of Todo)
+- We can do Todo.objects.get(id=1).title 
+
+
+
+
+
 ### read all data 
 Todo.objects.all()
 
@@ -59,6 +122,8 @@ Todo.objects.all().values()
 ### read single data 
 Todo.objects.get(id=1)
 - output: <Todo: Todo object (1)>
+
+* Note: get() = get is used to return only one object, if it return multiple object then it shows error 
 
 
 ### read single data with values
@@ -79,6 +144,7 @@ a.status
 
 
 ## step 5: update (U) data
+a = a = Todo.objects.get(id=1)
 a.status
 - output: False 
 
@@ -101,8 +167,101 @@ Todo.objects.filter(status=True)
 
 Todo.objects.filter(status=True).values()
 - output: 
-    <QuerySet [<Todo: Todo object (2)>, <Todo: Todo object (3)>, <Todo: Todo object (13)>]>
+    <QuerySet [{'id': 2, 'title': 'second', 'description': 'this is second', 'status': True, 'priority': 'imp'}, {'id': 3, 'title': 'third', 'description': 'this is third', 'status': True, 'priority': 'very imp'}, {'id': 13, 'title': 'eleven', 'description': '', 'status': True, 'priority': ''}]>
 
 Todo.objects.filter(status=True).title         # error, cannot do this 
 - output: 
     ttributeError: 'QuerySet' object has no attribute 'title'
+
+
+
+
+# NOTE: how to access query set methods --> by using for loop 
+
+## Example 1: Basic QuerySet loop
+tasks = Todo.objects.all()
+
+        for t in tasks:
+            print(t.title)
+            print(t.status)
+
+
+        - here: 
+            - tasks → QuerySet (collection of rows)
+            - t → one model object (Todo instance) at a time
+
+        so you can use:
+            - t.title
+            - t.status
+
+## Example 2: With filter
+tasks = Todo.objects.filter(status=True)
+
+        for t in tasks:
+            print(t.id, t.title)
+
+## Example 3: Using values() (IMPORTANT DIFFERENCE)
+tasks = Todo.objects.values()
+
+        for t in tasks:
+            print(t["title"])
+
+
+🧠 Difference here:
+# Query type	      Inside loop item     	Access style
+all() / filter()	    Model object	      t.title
+values()	               dict	              t["title"]
+
+
+
+# IMP: 
+
+## 1. QuerySet Methods + Return Types
+
+🔹 These return: QuerySet OR other simple types
+        all()              → QuerySet
+        filter()           → QuerySet
+        exclude()          → QuerySet
+        order_by()         → QuerySet
+        reverse()          → QuerySet
+
+        values()           → QuerySet (of dicts)
+        values_list()      → QuerySet (of tuples)
+
+        distinct()         → QuerySet
+        annotate()         → QuerySet
+
+        select_related()   → QuerySet
+        prefetch_related() → QuerySet
+
+
+🔹 Special QuerySet methods (with different return types)
+        get()        → Model Object
+        first()      → Model Object / None
+        last()       → Model Object / None
+        latest()     → Model Object
+        earliest()   → Model Object
+        count()      → int
+        exists()     → bool
+        aggregate()  → dict
+        update()     → int (rows affected)
+        delete()     → tuple
+
+
+
+## 2. Model Object Methods + Return Types (work on SINGLE row)
+
+- These work on one object like:
+    todo = Todo.objects.get(id=1)
+
+🔹 Object methods:
+        save()              → None
+        delete()            → tuple
+        refresh_from_db()   → None
+        full_clean()        → None
+
+
+🔹 Object attributes (not methods but important):
+        todo.title
+        todo.status
+        todo.id

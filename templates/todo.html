@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{%block title %}   {{title}}  {% endblock title%}
+
+{% block body %}
+
+
+    <h1> To-do app  </h1>
+    <p> This is to-do app </p>
+    <h3> Total task : {{total}} </h3>
+    <h3> Completed task: {{completed}} </h3>
+    <h3> Incompleted task: {{incompleted}} </h3>
+
+    <!-- creating dynamic table using bootstrap -->
+    <div class="container">
+        <table class="table   table-striped" "table-primary" >
+            <thead>
+                <tr>
+                    <th scope="col">S.N</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for i in tasks%}
+                <tr>
+                    <th scope="row"> {{forloop.counter}} </th>
+                    <td> {{i.title}} </td>
+                    <td> {{i.description}} </td>
+                    <td> {{i.priority}} </td>
+                    <td> {{i.status}} </td>
+                </tr>
+                {%endfor%}
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+{%endblock body%}

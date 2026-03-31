@@ -4,7 +4,7 @@
 - it is used to make the dynamic webpages 
 
 
-# how to use templates in djago ? ---------------------------------------------
+# how to use templates in djago ? 
 
 ## step 1: create 'templates' folder inside the current location 
 
@@ -38,10 +38,10 @@ def home(request):
 
 ## step 5: run the server 
 - the html page will be rendered on the browser 
----------------------------------------------------------------------------------
 
 
-# sending dynamic data on the webpage -------------------------------------------
+
+# sending dynamic data on the webpage
 
 ## step 1: in views.py : 
 
@@ -60,11 +60,10 @@ def home(request):
 </body>
 
 ## step 3: run the server 
-----------------------------------------------------------------------------------
 
 
-# creating dynamic table using bootstrap -----------------------------------------
 
+# creating dynamic table using bootstrap 
 ## in views.py: 
 
 def home(request):
@@ -96,32 +95,22 @@ def home(request):
 
 ## in home.html:
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+## ⬇️add link in header and script just before body
 
-    #⬇️add link here to use bootstrap
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
-</head>
-
-<div class="container">
-
-    <body>
-
-     <!-- showing dynaminc content using template -->
-
-     <h1> {{first_line}} </h1>
-     <p> {{second_line}} </p>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
 
 
-        <!-- creating dynamic table using bootstrap -->
+
+## create table using foreach loop. 
+
+- forloop.counter  - to show id in increasing order. 
+- you can also put conditions using if-else statement. 
 
         <table class="table   table-striped">
             <thead>
@@ -134,24 +123,23 @@ def home(request):
                 </tr>
             </thead>
             <tbody>
-                {%for i in people%}    <!-- people will contail the list of dictionary, i will contain the individual dictionary --> 
+                {%for i in people%}    
                 
-                 <!-- i = {"name": "Aarav", "age": 25, "salary": 50000, "address": "Kathmandu"}, -->
-               
                  <tr>
-                    <th scope="row"> {{forloop.counter}} </th>  <!-- 'forloop.counter' is used to set id in ascending order  -->
+                    <th scope="row"> {{forloop.counter}} </th> 
                     <td> {{i.name}} </td>
 
-                     <td> 
+                    <td> 
                     {% if i.age < 18%} Underage 
                     
                     {%elif i.age >= 18 and i.age < 50 %} Adult
                     
                     {%else%} Old 
 
-                    
                     {%endif%}
+
                     ({{i.age}})
+
                     </td>
 
 
@@ -162,17 +150,25 @@ def home(request):
 
             </tbody>
         </table>
-        
-</div>
 
-
-
-#⬇️ add script here to use bootstrap
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
-</body>
-
-</html>
 ---------------------------------------------------------------------------------
+
+
+# Note: 
+# {{ i.name }} -  dynamic 
+# Underage     -  tatic text 
+
+
+# 🔥 Simple Rule
+# {{ }} → for variables / dynamic values
+# {% %} → for logic (if, for, etc.)
+# Plain text → automatically displayed
+
+
+# A block is determined only by template tags, not by:
+
+# line breaks ❌
+# indentation ❌
+# spacing ❌
+
+# A block starts at a tag and continues until the next relevant tag
