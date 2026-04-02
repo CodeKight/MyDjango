@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
 from django.http import HttpResponse
+
 
 from .models import Todo
 
@@ -35,14 +36,14 @@ def home(request):
 
 def contact(request):
     context = {
-        "title": "Contact_extends",
-        "first_line": "this is contact",
+        "title": "Contact",
+        "first_line": "this is contact using extends",
         "second_line": "this is contact page rendering from contact function",
         
     }
-    return render(request, 'contact_extends.html', context)
+    return render(request, 'contact.html', context)
 
-def home_extends(request):
+def home2(request):
     
     people = [
     {"name": "Aarav", "age": 25, "salary": 50000, "address": "Kathmandu"},
@@ -62,12 +63,12 @@ def home_extends(request):
     ]
     
     context = {
-        "title": "Home_extends",
-        "first_line": "this is homepage with extends",
+        "title": "Home2",
+        "first_line": "this is homepage using extends",
         "second_line": "this is homepage rendering from function",
         "people": people
     }
-    return render(request, 'home_extends.html', context)
+    return render(request, 'home2.html', context)
 
 
 # todo app 
@@ -87,6 +88,48 @@ def todo(request):
     }
     return render(request, 'todo.html', context)
 
+def todo_create(request):
+    if request.method=='POST': 
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        if title=='' or description == '':
+      
+            context = {
+                "error": "Both fields are required",
+            }
+            return render(request, 'todo_create.html',context)
+        Todo.objects.create(title=title, description= description)
+        return redirect('/todo/')
+  
+    return render(request,'todo_create.html')    
+
+
+def todo_edit(request,id):
+    task = Todo.objects.get(id=id)
+    context = {
+        'task': task 
+    }
+    if request.method=='POST': 
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        task.title = title 
+        task.description = description 
+        task.save()
+        return redirect('/todo/')
+        
+    return render(request, 'todo_edit.html', context)    
+
+
+def todo_mark(request,id):
+    task = Todo.objects.get(id=id)
+    task.status = True
+    task.save()
+    return redirect('/todo/')
+
+def todo_delete(request,id):
+    task = Todo.objects.get(id=id)
+    task.delete()
+    return redirect('/todo/')
 
 
 

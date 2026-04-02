@@ -1,4 +1,7 @@
-# step 1: view
+
+# how to create a todo app 
+
+## step 1: view
 
 
 def todo(request):
@@ -17,7 +20,7 @@ def todo(request):
     return render(request, 'todo.html', context)
 
 
-# step 2: in urls
+## step 2: in urls
 from django.urls import path 
 
 urlpatterns=[
@@ -27,9 +30,11 @@ urlpatterns=[
 
 ]
 
-# step 3: create a template eg: todo.html
+## step 3: create a template eg: todo.html
 
-# step 4: in todo.html
+## step 4: in todo.html
+
+* put the table in a div and give it a class = "container" to center it 
 
 {% extends "base.html" %}
 {%block title %}   {{title}}  {% endblock title%}
@@ -74,5 +79,5 @@ urlpatterns=[
 
 {%endblock body%}
 
-# step 5: run the server 
+## step 5: run the server 
 - the todo table will be created on the browser html page. 

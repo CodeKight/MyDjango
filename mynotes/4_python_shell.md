@@ -109,19 +109,20 @@ Todo.objects.create(title="first", description = "this is first", status = False
 ### read all data 
 Todo.objects.all()
 
-- output: 
+- output: queryset of objects
     <QuerySet [<Todo: Todo object (1)>, <Todo: Todo object (2)>, <Todo: Todo object (3)>, <Todo: Todo object (4)>, <Todo: Todo object (5)>, <Todo: Todo object (6)>, <Todo: Todo object (7)>, <Todo: Todo object (8)>, <Todo: Todo object (9)>, <Todo: Todo object (10)>, <Todo: Todo object (11)>, <Todo: Todo object (12)>, <Todo: Todo object (13)>]>
 
 ### read all data with values 
 Todo.objects.all().values()
 
-- output: 
+- output: queryset of dictionanry
     <QuerySet [{'id': 1, 'title': 'first', 'description': 'this is first', 'status': False, 'priority': 'imp'}, {'id': 2, 'title': 'second', 'description': 'this is second', 'status': False, 'priority': 'imp'}, {'id': 3, 'title': 'third', 'description': 'this is third', 'status': True, 'priority': 'very imp'}, {'id': 4, 'title': 'fourth', 'description': 'this is fourth', 'status': False, 'priority': 'very very imp'}, {'id': 5, 'title': 'fifth', 'description': 'this is fifth', 'status': False, 'priority': ' imp'}, {'id': 6, 'title': 'first', 'description': 'this is first', 'status': False, 'priority': ''}, {'id': 7, 'title': 'first', 'description': 'this is first', 'status': False, 'priority': ''}, {'id': 8, 'title': 'first', 'description': '', 'status': False, 'priority': ''}, {'id': 9, 'title': 'nine', 'description': '', 'status': False, 'priority': ''}, {'id': 10, 'title': 'ten', 'description': '', 'status': False, 'priority': ''}, {'id': 11, 'title': 'eleven', 'description': '', 'status': False, 'priority': ''}, {'id': 12, 'title': 'eleven', 'description': '', 'status': False, 'priority': ''}, {'id': 13, 'title': 'eleven', 'description': '', 'status': True, 'priority': ''}]>
 
 
 ### read single data 
 Todo.objects.get(id=1)
-- output: <Todo: Todo object (1)>
+- output: model object(instance of model Todo)
+    <Todo: Todo object (1)>
 
 * Note: get() = get is used to return only one object, if it return multiple object then it shows error 
 
@@ -144,7 +145,7 @@ a.status
 
 
 ## step 5: update (U) data
-a = a = Todo.objects.get(id=1)
+a = Todo.objects.get(id=1)
 a.status
 - output: False 
 
@@ -176,7 +177,7 @@ Todo.objects.filter(status=True).title         # error, cannot do this
 
 
 
-# NOTE: how to access query set methods --> by using for loop 
+# NOTE: how to access queryset methods --> by using for loop 
 
 ## Example 1: Basic QuerySet loop
 tasks = Todo.objects.all()
@@ -205,6 +206,9 @@ tasks = Todo.objects.values()
 
         for t in tasks:
             print(t["title"])
+
+### Can also do: 
+Todo.objects.values("title").count()
 
 
 🧠 Difference here:
@@ -241,7 +245,13 @@ values()	               dict	              t["title"]
         last()       → Model Object / None
         latest()     → Model Object
         earliest()   → Model Object
-        count()      → int
+        count()      → int     
+                    👉count() works on ANY QuerySet
+                        ✅QuerySet of objects
+                        ✅QuerySet of dictionaries (values())
+                        ✅QuerySet of tuples (values_list())
+                        ❌Doesn't work on single object like: Todo.objects.get(id=1).count
+
         exists()     → bool
         aggregate()  → dict
         update()     → int (rows affected)

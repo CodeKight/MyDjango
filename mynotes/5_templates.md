@@ -96,7 +96,7 @@ def home(request):
 ## in home.html:
 
 
-## ⬇️add link in header and script just before body
+### ⬇️add link in header and script just before body
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -107,10 +107,9 @@ def home(request):
 
 
 
-## create table using foreach loop. 
+### create table using foreach loop. 
 
-- forloop.counter  - to show id in increasing order. 
-- you can also put conditions using if-else statement. 
+# forloop.counter  - to show id in increasing order.  
 
         <table class="table   table-striped">
             <thead>
@@ -123,31 +122,52 @@ def home(request):
                 </tr>
             </thead>
             <tbody>
-                {%for i in people%}    
-                
+                 {%for i in people%} 
+                 <tr>
+                    <th scope="row"> {{forloop.counter}} </th> 
+                    <td> {{i.name}} </td>
+                    <td> {{i.age}}</td>
+                    <td> {{i.salary}} </td>
+                    <td> {{i.address}} </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+
+# you can also put conditions using if-else statement.
+        <table class="table   table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Salary</th>
+                    <th scope="col">Address</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {%for i in people%}  
+                  
                  <tr>
                     <th scope="row"> {{forloop.counter}} </th> 
                     <td> {{i.name}} </td>
 
                     <td> 
-                    {% if i.age < 18%} Underage 
-                    
-                    {%elif i.age >= 18 and i.age < 50 %} Adult
-                    
-                    {%else%} Old 
+                        {% if i.age < 18%}   #🔺 if condition is put here 
+                            Underage 
+                        {%elif i.age >= 18 and i.age < 50 %} 
+                            Adult
+                        {%else%} 
+                            Old 
+                        {%endif%}
 
-                    {%endif%}
-
-                    ({{i.age}})
-
+                        ({{i.age}})
                     </td>
-
-
                     <td> {{i.salary}} </td>
                     <td> {{i.address}} </td>
                 </tr>
                 {%endfor%}
-
             </tbody>
         </table>
 
@@ -156,7 +176,7 @@ def home(request):
 
 # Note: 
 # {{ i.name }} -  dynamic 
-# Underage     -  tatic text 
+# Underage     -  static text 
 
 
 # 🔥 Simple Rule
