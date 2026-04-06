@@ -1,10 +1,108 @@
 from django.shortcuts import render, redirect 
 from django.http import HttpResponse
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 
 from .models import Todo
+from .serializer import TodoSerializer
 
 # Create your views here.
+
+# API: 
+
+@api_view(['GET'])
+def todo_welcome(request):
+    return Response({"detail":"wELCOME "})
+
+
+@api_view(['GET'])
+def todo_display(request):
+    task = Todo.objects.all()
+    serializer = TodoSerializer( task, many=True)
+    return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+# todo app 
+
+def todo(request):
+    tasks = Todo.objects.all()    # getting all the data from the table in a list of dictionary format
+    total = tasks.count()
+    completed = Todo.objects.filter(status = True).count()
+    incompleted = Todo.objects.filter(status = False).count()
+    
+    context = {
+        "title": "To-do app", 
+        "tasks": tasks,
+        "total": total, 
+        "completed": completed,
+        "incompleted": incompleted
+    }
+    return render(request, 'todo.html', context)
+
+def todo_create(request):
+    if request.method=='POST': 
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        if title=='' or description == '':
+      
+            context = {
+                "error": "Both fields are required",
+            }
+            return render(request, 'todo_create.html',context)
+        Todo.objects.create(title=title, description= description)
+        return redirect('/todo/')
+  
+    return render(request,'todo_create.html')    
+
+
+def todo_edit(request,id):
+    task = Todo.objects.get(id=id)
+    context = {
+        'task': task 
+    }
+    if request.method=='POST': 
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        task.title = title 
+        task.description = description 
+        task.save()
+        return redirect('/todo/')
+        
+    return render(request, 'todo_edit.html', context)    
+
+
+def todo_mark(request,id):
+    task = Todo.objects.get(id=id)
+    task.status = True
+    task.save()
+    return redirect('/todo/')
+
+def todo_delete(request,id):
+    task = Todo.objects.get(id=id)
+    task.delete()
+    return redirect('/todo/')
+
+
+
+
+
+
+
+
+
+# template: 
 
 def home(request):
     people = [
@@ -71,65 +169,6 @@ def home2(request):
     return render(request, 'home2.html', context)
 
 
-# todo app 
-
-def todo(request):
-    tasks = Todo.objects.all()    # getting all the data from the table in a list of dictionary format
-    total = tasks.count()
-    completed = Todo.objects.filter(status = True).count()
-    incompleted = Todo.objects.filter(status = False).count()
-    
-    context = {
-        "title": "To-do app", 
-        "tasks": tasks,
-        "total": total, 
-        "completed": completed,
-        "incompleted":incompleted
-    }
-    return render(request, 'todo.html', context)
-
-def todo_create(request):
-    if request.method=='POST': 
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        if title=='' or description == '':
-      
-            context = {
-                "error": "Both fields are required",
-            }
-            return render(request, 'todo_create.html',context)
-        Todo.objects.create(title=title, description= description)
-        return redirect('/todo/')
-  
-    return render(request,'todo_create.html')    
-
-
-def todo_edit(request,id):
-    task = Todo.objects.get(id=id)
-    context = {
-        'task': task 
-    }
-    if request.method=='POST': 
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        task.title = title 
-        task.description = description 
-        task.save()
-        return redirect('/todo/')
-        
-    return render(request, 'todo_edit.html', context)    
-
-
-def todo_mark(request,id):
-    task = Todo.objects.get(id=id)
-    task.status = True
-    task.save()
-    return redirect('/todo/')
-
-def todo_delete(request,id):
-    task = Todo.objects.get(id=id)
-    task.delete()
-    return redirect('/todo/')
 
 
 
@@ -137,10 +176,7 @@ def todo_delete(request,id):
 
 
 
-
-
-
-
+## render:
 
 # def home(request):
 #     context = {
@@ -160,16 +196,15 @@ def todo_delete(request,id):
 
 
 
+# HttpResponse: 
 
-
-# def first(request):
-#     # return HttpResponse("Hello World")
-#     return HttpResponse("<h1> Hello world again </h1> ")  # can also sent html element
+def first(request):
+    return HttpResponse("Hello World")
+    # return HttpResponse("<h1> Hello world again </h1> ")  # can also sent html element
 
 # def home(request):
 #     return HttpResponse("<h2> This is home. </h2>  ")
 
 # def contact_us(request):
 #     return HttpResponse("<h3> This is cotact. <h3> ")
-
 
